@@ -732,7 +732,7 @@ FeedParser.prototype.handleCloseTag = function (el, scope){
       utils.merge(parser.meta, handleMeta(parser.stack[0], parser.meta['#type']));
       parser.emit('meta', parser.meta);
     }
-    item = handleItem(n, parser.meta['#type']);
+    var item = handleItem(n, parser.meta['#type']);
     item.meta = parser.meta;
     if (parser.meta.author && !item.author) item.author = parser.meta.author;
     parser.emit('article', item);
