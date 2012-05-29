@@ -685,6 +685,7 @@ FeedParser.prototype.handleOpenTag = function (node, scope){
 
 FeedParser.prototype.handleCloseTag = function (el, scope){
   var parser = scope;
+  var item;
   var n = parser.stack.shift();
   delete n['#name'];
 
@@ -732,7 +733,7 @@ FeedParser.prototype.handleCloseTag = function (el, scope){
       utils.merge(parser.meta, handleMeta(parser.stack[0], parser.meta['#type']));
       parser.emit('meta', parser.meta);
     }
-    var item = handleItem(n, parser.meta['#type']);
+    item = handleItem(n, parser.meta['#type']);
     item.meta = parser.meta;
     if (parser.meta.author && !item.author) item.author = parser.meta.author;
     parser.emit('article', item);
