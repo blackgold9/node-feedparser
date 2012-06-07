@@ -620,7 +620,8 @@ FeedParser.prototype.handleEnd = function (scope){
       }
       parser.callback(error);
     } else {
-      parser.callback(null, parser.meta, parser.articles);
+      parser.callback(null, { meta: parser.meta
+                            , articles: parser.articles });
     }
   }
   parser._reset();

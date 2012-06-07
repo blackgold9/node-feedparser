@@ -12,12 +12,21 @@ Isaac Schlueter's [sax](https://github.com/isaacs/sax-js) parser.
 
 npm install feedparser
 
-## Breakage Note
+## Breakage Notes
 
-If you are upgrading from version 0.9.x or earlier, note that when you require
-the module using `require('feedparser')`, you now will receive an instance of
-FeedParser rather than an object. If you wish to create your own instance for
-some reason, use `require('feedparser').FeedParser` or some variant of that.
+This is pre-1.0 software, so I hope you're not too surprised by these changes.
+
+If you are upgrading from version 0.9.x or earlier, note the following:
+
+1. When you require the module using `require('feedparser')`, you now will
+receive an instance of FeedParser rather than an object. If you wish to create
+your own instance for some reason, use `require('feedparser').FeedParser` or
+some variant of that.
+
+2. If you use the callback passing method, we now follow node.js convention
+and pass just two parameters: error and results. The results object has two
+properties: `meta` and `articles`. We no long pass meta and articles as
+separate parameters.
 
 ## Examples
 
@@ -71,17 +80,18 @@ some reason, use `require('feedparser').FeedParser` or some variant of that.
 ### Use with a callback
 
 When the feed is finished being parsed, if you provide a callback, it gets
-called with three parameters: error, meta, and articles.
+called with two parameters: error (or null) and a results object having two
+properties -- `meta` and `articles`.
 
 ```javascript
 
-    function myCallback (error, meta, articles){
+    function myCallback (error, results){
       if (error) console.error(error);
       else {
         console.log('Feed info');
-        console.log('%s - %s - %s', meta.title, meta.link, meta.xmlUrl);
+        console.log('%s - %s - %s', results.meta.title, results.meta.link, results.meta.xmlUrl);
         console.log('Articles');
-        articles.forEach(function (article){
+        results.articles.forEach(function (article){
           console.log('%s - %s (%s)', article.date, article.title, article.link);
         });
       }
