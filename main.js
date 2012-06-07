@@ -207,7 +207,7 @@ function handleMeta (node, type, options) {
       else if (node['dc:publisher']) meta.author = utils.get(node['dc:publisher']);
     }
     if (!meta.language) {
-      if (node['@']['xml:lang']) meta.language = utils.get(node['@'], 'xml:lang');
+      if (node['@'] && node['@']['xml:lang']) meta.language = utils.get(node['@'], 'xml:lang');
       else if (node['dc:language']) meta.language = utils.get(node['dc:language']);
     }
     if (!meta.image.url) {
@@ -218,10 +218,22 @@ function handleMeta (node, type, options) {
       if (node['media:copyright']) meta.copyright = utils.get(node['media:copyright']);
       else if (node['dc:rights']) meta.copyright = utils.get(node['dc:rights']);
       else if (node['creativecommons:license']) meta.copyright = utils.get(node['creativecommons:license']);
-      else if (node['cc:license'] && node['cc:license']['@']['rdf:resource']) meta.copyright = utils.get(node['cc:license']['@'], 'rdf:resource');
+      else if (node['cc:license']) {
+        if (Array.isArray(node['cc:license']) && node['cc:license'][0]['@'] && node['cc:license'][0]['@']['rdf:resource']) {
+          meta.copyright = utils.get(node['cc:license'][0]['@'], 'rdf:resource');
+        } else if (node['cc:license']['@'] && node['cc:license']['@']['rdf:resource']) {
+          meta.copyright = utils.get(node['cc:license']['@'], 'rdf:resource');
+        }
+      }
     }
     if (!meta.generator) {
-      if (node['admin:generatoragent'] && node['admin:generatoragent']['@']['rdf:resource']) meta.generator = utils.get(node['admin:generatoragent']['@'], 'rdf:resource');
+      if (node['admin:generatoragent']) {
+        if (Array.isArray(node['admin:generatoragent']) && node['admin:generatoragent'][0]['@'] && node['admin:generatoragent'][0]['@']['rdf:resource']) {
+          meta.generator = utils.get(node['admin:generatoragent'][0]['@'], 'rdf:resource');
+        } else if (node['admin:generatoragent']['@'] && node['admin:generatoragent']['@']['rdf:resource']) {
+          meta.generator = utils.get(node['admin:generatoragent']['@'], 'rdf:resource');
+        }
+      }
     }
     if (meta.categories.length)
       meta.categories = utils.unique(meta.categories);

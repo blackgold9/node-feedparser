@@ -73,6 +73,10 @@ exports.unique = unique;
 function get(obj, subkey) {
   if (!subkey)
     subkey = '#';
+
+  if (Array.isArray(obj))
+    obj = obj[0];
+
   if (obj && obj[subkey])
     return obj[subkey];
   else
