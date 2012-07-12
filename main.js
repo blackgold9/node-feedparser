@@ -292,6 +292,7 @@ function handleItem (node, type, options){
           el.forEach(function (link){
             if (link['@']['href']) { // Atom
               if (utils.get(link['@'], 'rel')) {
+                if (link['@']['rel'] == 'canonical') item.origlink = link['@']['href'];
                 if (link['@']['rel'] == 'alternate') item.link = link['@']['href'];
                 if (link['@']['rel'] == 'replies') item.comments = link['@']['href'];
                 if (link['@']['rel'] == 'enclosure') {
@@ -311,6 +312,7 @@ function handleItem (node, type, options){
         } else {
           if (el['@']['href']) { // Atom
             if (utils.get(el['@'], 'rel')) {
+              if (el['@']['rel'] == 'canonical') item.origlink = el['@']['href'];
               if (el['@']['rel'] == 'alternate') item.link = el['@']['href'];
               if (el['@']['rel'] == 'replies') item.comments = el['@']['href'];
               if (el['@']['rel'] == 'enclosure') {
@@ -440,7 +442,9 @@ function handleItem (node, type, options){
         break;
       case('feedburner:origlink'):
       case('pheedo:origlink'):
-        item.origlink = utils.get(el);
+        if (!item.origlink) {
+          item.origlink = utils.get(el);
+        }
         break;
       } // switch end
     }
